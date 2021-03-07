@@ -6,6 +6,10 @@ ENV PATH "$PATH:$CCNL_HOME/build/bin"
 ENV CCNL_PORT 9000
 ENV USE_NFN 1
 
+# install new packages.
+RUN apt --yes update
+RUN apt install --yes software-properties-common
+
 # add additional repositories.
 RUN add-apt-repository --yes --no-update ppa:openjdk-r/ppa
 
