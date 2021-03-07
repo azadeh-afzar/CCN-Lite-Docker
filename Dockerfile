@@ -38,13 +38,17 @@ RUN apt install --yes cmake
 RUN cd /var
 RUN git clone https://github.com/cn-uofbasel/ccn-lite.git
 
+# build ccn lite.
+RUN cd cnn-lite
+RUN mkdir build
+RUN cd build
+RUN cmake ../src
+RUN make clean all
+
 # set working directory.
 WORKDIR /var/ccn-lite
 
-# build ccn lite.
-RUN mkdir build
-RUN cd build && cmake ../src && make clean all
-
+# set protocol:port
 EXPOSE 9000/udp
 
 # CMD ["/var/ccn-lite/bin/ccn-nfn-relay", "-s", "ndn2013", "-d", "test/ndntlv" "-v", "info", "-u", "$CCNL_PORT", "-x", "/tmp/ccn-lite-mgmt.sock"]
