@@ -13,6 +13,8 @@ RUN add-apt-repository --yes --no-update  "deb http://security.ubuntu.com/ubuntu
 
 # install new packages.
 RUN apt --yes update
+RUN apt install --yes git
+RUN apt install --yes git-core
 RUN apt install --yes wget 
 RUN apt install --yes libssl-dev
 RUN apt install --yes default-jre
@@ -28,11 +30,18 @@ RUN rm "${HOME}/kitware.asc"
 # add additional repositories.
 RUN add-apt-repository --yes --no-update "deb https://apt.kitware.com/ubuntu/ bionic main"
 
+# install new packages.
 RUN apt --yes update
 RUN apt install --yes cmake
 
-ADD . /var/ccn-lite
+# get the ccn lite package from github.
+RUN cd /var
+RUN git clone https://github.com/cn-uofbasel/ccn-lite.git
+
+# set working directory.
 WORKDIR /var/ccn-lite
+
+# build ccn lite.
 RUN mkdir build
 RUN cd build && cmake ../src && make clean all
 
