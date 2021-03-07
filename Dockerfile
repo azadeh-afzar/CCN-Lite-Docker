@@ -10,14 +10,11 @@ ENV USE_NFN 1
 RUN apt --yes update
 RUN apt install --yes software-properties-common
 
-# add additional repositories.
-RUN add-apt-repository --yes --no-update ppa:openjdk-r/ppa
-
 # install new packages.
 RUN apt --yes update
 RUN apt install --yes wget 
 RUN apt install --yes libssl-dev
-RUN apt install --yes openjdk-7-jre
+RUN apt install --yes default-jre
 RUN apt install --yes build-essential
 
 # add cmake signing key.
