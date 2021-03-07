@@ -21,7 +21,7 @@ RUN apt install --yes build-essential
 RUN wget --retry-connrefused --waitretry=1 \
 --read-timeout=20 --timeout=15 -t 0 --no-dns-cache \
 --output-document "${HOME}/kitware.asc" https://apt.kitware.com/keys/kitware-archive-latest.asc
-RUN apt-add-key "${HOME}/kitware.asc"
+RUN apt-key add "${HOME}/kitware.asc"
 RUN rm "${HOME}/kitware.asc"
 
 # add additional repositories.
