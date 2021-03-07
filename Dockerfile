@@ -37,11 +37,14 @@ RUN apt install --yes cmake
 # get the ccn lite package from github.
 RUN cd /var
 RUN git clone https://github.com/cn-uofbasel/ccn-lite.git
-
+RUN ls -lsa
 # build ccn lite.
 RUN cd ccn-lite
+RUN ls -lsa
 RUN mkdir build
 RUN cd build
+RUN pwd
+RUN ls -lsa
 RUN cmake ../src
 RUN make clean all
 
