@@ -9,6 +9,7 @@ ENV USE_NFN 1
 # install new packages.
 RUN apt --yes update
 RUN apt install --yes software-properties-common
+RUN add-apt-repository --yes --no-update  "deb http://security.ubuntu.com/ubuntu xenial-security main"
 
 # install new packages.
 RUN apt --yes update
