@@ -39,7 +39,7 @@ RUN cd /var
 RUN git clone https://github.com/cn-uofbasel/ccn-lite.git
 
 # build ccn lite.
-RUN cd cnn-lite
+RUN cd ccn-lite
 RUN mkdir build
 RUN cd build
 RUN cmake ../src
