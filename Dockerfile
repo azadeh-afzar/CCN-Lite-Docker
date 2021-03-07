@@ -35,21 +35,15 @@ RUN apt --yes update
 RUN apt install --yes cmake
 
 # get the ccn lite package from github.
-RUN cd /var
+WORKDIR /var
 RUN git clone https://github.com/cn-uofbasel/ccn-lite.git
-RUN ls -lsa
-# build ccn lite.
-RUN cd ccn-lite
-RUN ls -lsa
+
+# build ccn lite
+WORKDIR /var/ccn-lite
 RUN mkdir build
 RUN cd build
-RUN pwd
-RUN ls -lsa
 RUN cmake ../src
 RUN make clean all
-
-# set working directory.
-WORKDIR /var/ccn-lite
 
 # set protocol:port
 EXPOSE 9000/udp
