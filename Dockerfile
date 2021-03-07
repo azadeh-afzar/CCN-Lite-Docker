@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:14.04
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV CCNL_HOME /var/ccn-lite
