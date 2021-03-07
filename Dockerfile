@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV CCNL_HOME /var/ccn-lite
@@ -6,8 +6,28 @@ ENV PATH "$PATH:$CCNL_HOME/build/bin"
 ENV CCNL_PORT 9000
 ENV USE_NFN 1
 
-RUN apt-get -y update
-RUN apt-get install -y libssl-dev build-essential wget openjdk-7-jre
+# add additional repositories.
+RUN add-apt-repository --yes --no-update ppa:openjdk-r/ppa
+
+# install new packages.
+RUN apt --yes update
+RUN apt install --yes wget 
+RUN apt install --yes libssl-dev
+RUN apt install --yes openjdk-7-jre
+RUN apt install --yes build-essential
+
+# add cmake signing key.
+RUN wget --retry-connrefused --waitretry=1 \
+--read-timeout=20 --timeout=15 -t 0 --no-dns-cache \
+--output-document "${HOME}/kitware.asc" https://apt.kitware.com/keys/kitware-archive-latest.asc
+RUN apt-add-key "${HOME}/kitware.asc"
+RUN rm "${HOME}/kitware.asc"
+
+# add additional repositories.
+RUN add-apt-repository --yes --no-update "deb https://apt.kitware.com/ubuntu/ bionic main"
+
+RUN apt --yes update
+RUN apt install --yes cmake
 
 ADD . /var/ccn-lite
 WORKDIR /var/ccn-lite
