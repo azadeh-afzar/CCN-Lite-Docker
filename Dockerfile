@@ -13,6 +13,7 @@ RUN add-apt-repository --yes --no-update  "deb http://security.ubuntu.com/ubuntu
 
 # install new packages.
 RUN apt --yes update
+RUN apt install --yes apt-utils
 RUN apt install --yes git
 RUN apt install --yes git-core
 RUN apt install --yes wget 
