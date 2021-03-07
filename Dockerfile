@@ -39,9 +39,7 @@ WORKDIR /var
 RUN git clone https://github.com/cn-uofbasel/ccn-lite.git
 
 # build ccn lite
-WORKDIR /var/ccn-lite
-RUN mkdir build
-RUN cd build
+WORKDIR /var/ccn-lite/build
 RUN cmake ../src
 RUN make clean all
 
