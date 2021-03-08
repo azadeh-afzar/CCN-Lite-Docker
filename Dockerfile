@@ -1,10 +1,16 @@
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
+
+# set environment variables.
 ENV CCNL_HOME /var/ccn-lite
-ENV PATH "$PATH:$CCNL_HOME/build/bin"
+ENV CS /var/content-store/
+ENV PACPROTO ndn2013
 ENV CCNL_PORT 9000
 ENV USE_NFN 1
+
+# append ccn lite binaries to path.
+ENV PATH "${PATH}:${CCNL_HOME}/build/bin"
 
 # install new packages.
 RUN apt --yes update
@@ -13,10 +19,12 @@ RUN add-apt-repository --yes --no-update  "deb http://security.ubuntu.com/ubuntu
 
 # install new packages.
 RUN apt --yes update
+RUN apt full-upgrade --fix-missing
 RUN apt install --yes apt-utils
+RUN apt install --yes pkg-config
 RUN apt install --yes git
 RUN apt install --yes git-core
-RUN apt install --yes wget 
+RUN apt install --yes wget
 RUN apt install --yes libssl-dev
 RUN apt install --yes default-jre
 RUN apt install --yes build-essential
@@ -39,13 +47,16 @@ RUN apt install --yes cmake
 WORKDIR /var
 RUN git clone https://github.com/cn-uofbasel/ccn-lite.git
 
-# build ccn lite
+# create content store directory.
+WORKDIR ${CS}
+
+# build ccn lite.
 WORKDIR /var/ccn-lite/build
 RUN cmake ../src
 RUN make clean all
 
-# set protocol:port
-EXPOSE 9000/udp
+# set port:protocol
+EXPOSE ${CCNL_PORT}/udp
 
-# CMD ["/var/ccn-lite/bin/ccn-nfn-relay", "-s", "ndn2013", "-d", "test/ndntlv" "-v", "info", "-u", "$CCNL_PORT", "-x", "/tmp/ccn-lite-mgmt.sock"]
-# CMD /var/ccn-lite/bin/ccn-lite-relay -s ndn2013 -d test/ndntlv -v info -u $CCNL_PORT -x /tmp/ccn-lite-mgmt.sock
+# create a ccn relay.
+CMD ccn-lite-relay -s ${PACPROTO} -d ${CS} -v info -u ${CCNL_PORT} -x /tmp/ccn-lite-mgmt.sock
