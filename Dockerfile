@@ -8,6 +8,7 @@ ENV CS /var/content-store/
 ENV PACPROTO ndn2013
 ENV CCNL_PORT 9000
 ENV USE_NFN 1
+ENV USE_FRAG 1
 
 # append ccn lite binaries to path.
 ENV PATH "${PATH}:${CCNL_HOME}/build/bin"
@@ -28,6 +29,7 @@ RUN apt install --yes wget
 RUN apt install --yes libssl-dev
 RUN apt install --yes default-jre
 RUN apt install --yes build-essential
+RUN apt install --yes iproute2
 
 # add cmake signing key.
 RUN wget --retry-connrefused --waitretry=1 \
@@ -54,9 +56,6 @@ WORKDIR ${CS}
 WORKDIR /var/ccn-lite/build
 RUN cmake ../src
 RUN make clean all
-
-# set port:protocol
-EXPOSE ${CCNL_PORT}/udp
 
 # create a ccn relay.
 CMD ccn-lite-relay -s ${PACPROTO} -d ${CS} -v info -u ${CCNL_PORT} -x /tmp/ccn-lite-mgmt.sock
