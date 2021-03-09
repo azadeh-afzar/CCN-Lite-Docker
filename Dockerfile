@@ -54,7 +54,7 @@ WORKDIR ${CS}
 WORKDIR /var/ccn-lite/build
 RUN cmake                           \
     -D USE_NFN=1                    \
-    -D USE_FRAG=1                   \
+    -D USE_FRAG=0                   \
     -D USE_MGMT=1                   \
     -D USE_IPV4=1                   \
     -D USE_IPV6=1                   \
