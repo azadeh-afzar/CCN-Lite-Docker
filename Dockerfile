@@ -7,8 +7,6 @@ ENV CCNL_HOME /var/ccn-lite
 ENV CS /var/content-store/
 ENV PACPROTO ndn2013
 ENV CCNL_PORT 9000
-ENV USE_NFN 1
-ENV USE_FRAG 1
 
 # append ccn lite binaries to path.
 ENV PATH "${PATH}:${CCNL_HOME}/build/bin"
@@ -54,8 +52,26 @@ WORKDIR ${CS}
 
 # build ccn lite.
 WORKDIR /var/ccn-lite/build
-RUN cmake ../src
+RUN cmake                           \
+    -D USE_NFN                      \
+    -D USE_FRAG                     \
+    -D USE_MGMT                     \
+    -D USE_IPV4                     \
+    -D USE_IPV6                     \
+    -D USE_DEBUG                    \
+    -D USE_STATS                    \
+    -D USE_LOGGING                  \
+    -D USE_HMAC256                  \
+    -D USE_DUP_CHECK                \
+    -D USE_LINKLAYER                \
+    -D USE_CCNxDIGEST               \
+    -D USE_UNIXSOCKET               \
+    -D USE_HTTP_STATUS              \
+    -D USE_DEBUG_MALLOC             \
+    -D NEEDS_PACKET_CRAFTING        \
+    -D NEEDS_PREFIX_MATCHING        \
+    -S ../src                       
 RUN make clean all
 
 # create a ccn relay.
-CMD ccn-lite-relay -s ${PACPROTO} -d ${CS} -v info -u ${CCNL_PORT} -x /tmp/ccn-lite-mgmt.sock
+CMD ccn-lite-relay -s ${PACPROTO} -d ${CS} -v trace -u ${CCNL_PORT} -x /tmp/ccnl-relay.sock
