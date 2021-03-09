@@ -53,23 +53,23 @@ WORKDIR ${CS}
 # build ccn lite.
 WORKDIR /var/ccn-lite/build
 RUN cmake                           \
-    -D USE_NFN                      \
-    -D USE_FRAG                     \
-    -D USE_MGMT                     \
-    -D USE_IPV4                     \
-    -D USE_IPV6                     \
-    -D USE_DEBUG                    \
-    -D USE_STATS                    \
-    -D USE_LOGGING                  \
-    -D USE_HMAC256                  \
-    -D USE_DUP_CHECK                \
-    -D USE_LINKLAYER                \
-    -D USE_CCNxDIGEST               \
-    -D USE_UNIXSOCKET               \
-    -D USE_HTTP_STATUS              \
-    -D USE_DEBUG_MALLOC             \
-    -D NEEDS_PACKET_CRAFTING        \
-    -D NEEDS_PREFIX_MATCHING        \
+    -D USE_NFN=1                    \
+    -D USE_FRAG=1                   \
+    -D USE_MGMT=1                   \
+    -D USE_IPV4=1                   \
+    -D USE_IPV6=1                   \
+    -D USE_DEBUG=1                  \
+    -D USE_STATS=1                  \
+    -D USE_LOGGING=1                \
+    -D USE_HMAC256=1                \
+    -D USE_DUP_CHECK=1              \
+    -D USE_LINKLAYER=1              \
+    -D USE_CCNxDIGEST=1             \
+    -D USE_UNIXSOCKET=1             \
+    -D USE_HTTP_STATUS=1            \
+    -D USE_DEBUG_MALLOC=1           \
+    -D NEEDS_PACKET_CRAFTING=1      \
+    -D NEEDS_PREFIX_MATCHING=1      \
     -S ../src                       
 RUN make clean all
 
