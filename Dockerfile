@@ -18,7 +18,7 @@ RUN add-apt-repository --yes --no-update  "deb http://security.ubuntu.com/ubuntu
 
 # install new packages.
 RUN apt --yes update
-RUN apt full-upgrade --fix-missing
+RUN apt full-upgrade --fix-missing --yes
 RUN apt install --yes apt-utils
 RUN apt install --yes pkg-config
 RUN apt install --yes git
