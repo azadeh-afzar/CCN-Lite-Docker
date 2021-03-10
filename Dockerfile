@@ -43,34 +43,16 @@ RUN add-apt-repository --yes --no-update "deb https://apt.kitware.com/ubuntu/ bi
 RUN apt --yes update
 RUN apt install --yes cmake
 
-# get the ccn lite package from github.
-WORKDIR /var
-RUN git clone https://github.com/cn-uofbasel/ccn-lite.git
-
 # create content store directory.
 WORKDIR ${CS}
 
+# get the ccn lite package from github.
+WORKDIR /var
+RUN git clone https://gitlab.com/Azadeh-Afzar/Computer-Science/Networking/CCN-Lite.git && git checkout fix-new-interest-bug
+
 # build ccn lite.
 WORKDIR /var/ccn-lite/build
-RUN cmake                           \
-    -D USE_NFN=1                    \
-    -D USE_FRAG=0                   \
-    -D USE_MGMT=1                   \
-    -D USE_IPV4=1                   \
-    -D USE_IPV6=1                   \
-    -D USE_DEBUG=1                  \
-    -D USE_STATS=1                  \
-    -D USE_LOGGING=1                \
-    -D USE_HMAC256=1                \
-    -D USE_DUP_CHECK=1              \
-    -D USE_LINKLAYER=1              \
-    -D USE_CCNxDIGEST=1             \
-    -D USE_UNIXSOCKET=1             \
-    -D USE_HTTP_STATUS=1            \
-    -D USE_DEBUG_MALLOC=1           \
-    -D NEEDS_PACKET_CRAFTING=1      \
-    -D NEEDS_PREFIX_MATCHING=1      \
-    -S ../src                       
+RUN cmake ../src
 RUN make clean all
 
 # create a ccn relay.
