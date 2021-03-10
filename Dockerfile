@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND noninteractive
 
 # set environment variables.
-ENV CCNL_HOME /var/ccn-lite
+ENV CCNL_HOME /var/CCN-Lite
 ENV CS /var/content-store/
 ENV PACPROTO ndn2013
 ENV CCNL_PORT 9000
@@ -48,10 +48,14 @@ WORKDIR ${CS}
 
 # get the ccn lite package from github.
 WORKDIR /var
-RUN git clone https://gitlab.com/Azadeh-Afzar/Computer-Science/Networking/CCN-Lite.git && git checkout fix-new-interest-bug
+RUN git clone https://gitlab.com/Azadeh-Afzar/Computer-Science/Networking/CCN-Lite.git
+
+# checkout to desired branch.
+WORKDIR ${CCNL_HOME}
+RUN git checkout fix-new-interest-bug
 
 # build ccn lite.
-WORKDIR /var/ccn-lite/build
+WORKDIR ${CCNL_HOME}/build
 RUN cmake ../src
 RUN make clean all
 
