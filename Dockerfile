@@ -52,7 +52,7 @@ RUN git clone https://gitlab.com/Azadeh-Afzar/Computer-Science/Networking/CCN-Li
 
 # checkout to desired branch.
 WORKDIR ${CCNL_HOME}
-RUN git checkout master
+RUN git checkout fix-new-interest-bug
 
 # build ccn lite.
 WORKDIR ${CCNL_HOME}/build
