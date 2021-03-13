@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # set environment variables.
 ENV CCNL_HOME /var/CCN-Lite
-ENV CS /var/content-store/
+ENV CONTENT_STOR /var/content-store/
 ENV PACPROTO ndn2013
 ENV CCNL_PORT 9000
 
@@ -28,6 +28,7 @@ RUN apt install --yes libssl-dev
 RUN apt install --yes default-jre
 RUN apt install --yes build-essential
 RUN apt install --yes iproute2
+RUN apt install --yes net-tools
 
 # add cmake signing key.
 RUN wget --retry-connrefused --waitretry=1 \
@@ -44,7 +45,7 @@ RUN apt --yes update
 RUN apt install --yes cmake
 
 # create content store directory.
-WORKDIR ${CS}
+WORKDIR ${CONTENT_STOR}
 
 # get the ccn lite package from github.
 WORKDIR /var
@@ -60,4 +61,4 @@ RUN cmake ../src
 RUN make clean all
 
 # create a ccn relay.
-CMD ccn-lite-relay -s ${PACPROTO} -d ${CS} -v trace -u ${CCNL_PORT} -x /tmp/ccnl-relay.sock
+CMD ccn-lite-relay -s ${PACPROTO} -d ${CONTENT_STOR} -v trace -u ${CCNL_PORT} -x /tmp/ccnl-relay.sock
