@@ -13,7 +13,7 @@ ENV CCNL_PORT 9000
 ENV PATH "${PATH}:${CCNL_HOME}/build/bin"
 
 # install new packages.
-RUN apt install --yes software-properties-common
+RUN apt update && apt install --yes software-properties-common
 RUN add-apt-repository --yes "deb http://security.ubuntu.com/ubuntu xenial-security main"
 
 # install new packages.
