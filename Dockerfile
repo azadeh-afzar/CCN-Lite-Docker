@@ -1,8 +1,9 @@
 FROM ubuntu:20.04
 
-ENV DEBIAN_FRONTEND noninteractive
+LABEL maintainer "Mohammad Mahdi Baghbani Pourvahid <MahdiBaghbani@protonmail.com>"
 
 # set environment variables.
+ENV DEBIAN_FRONTEND noninteractive
 ENV CCNL_HOME /var/CCN-Lite
 ENV CONTENT_STOR /var/content-store/
 ENV PACPROTO ndn2013
@@ -12,23 +13,22 @@ ENV CCNL_PORT 9000
 ENV PATH "${PATH}:${CCNL_HOME}/build/bin"
 
 # install new packages.
-RUN apt --yes update
 RUN apt install --yes software-properties-common
-RUN add-apt-repository --yes --no-update  "deb http://security.ubuntu.com/ubuntu xenial-security main"
+RUN add-apt-repository --yes "deb http://security.ubuntu.com/ubuntu xenial-security main"
 
 # install new packages.
-RUN apt --yes update
-RUN apt full-upgrade --fix-missing --yes
-RUN apt install --yes apt-utils
-RUN apt install --yes pkg-config
-RUN apt install --yes git
-RUN apt install --yes git-core
-RUN apt install --yes wget
-RUN apt install --yes libssl-dev
-RUN apt install --yes default-jre
-RUN apt install --yes build-essential
-RUN apt install --yes iproute2
-RUN apt install --yes net-tools
+RUN apt update &&           \
+    apt install --yes       \
+    apt-utils               \
+    pkg-config              \
+    git                     \
+    git-core                \
+    wget                    \
+    libssl-dev              \
+    default-jre             \
+    build-essential         \
+    iproute2                \
+    net-tools
 
 # add cmake signing key.
 RUN wget --retry-connrefused --waitretry=1 \
@@ -59,6 +59,9 @@ RUN git checkout master
 WORKDIR ${CCNL_HOME}/build
 RUN cmake ../src
 RUN make clean all
+
+# expose port.
+EXPOSE ${CCNL_PORT}/udp
 
 # create a ccn relay.
 CMD ccn-lite-relay -s ${PACPROTO} -d ${CONTENT_STOR} -v trace -u ${CCNL_PORT} -x /tmp/ccnl-relay.sock
