@@ -64,13 +64,37 @@ docker build untaged:
   except:
     - tags
 
+gitlab build untaged branch:
+  stage: build
+  before_script:
+    - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+  script:
+    - docker pull ${CI_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH} || true
+    - docker build --pull --cache-from ${CI_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH} -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH} .
+    - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH}
+  except:
+    - master
+    - tags
+
+docker build untaged branch:
+  stage: build
+  before_script:
+    - docker login --username ${DOCKER_REGISTRY_USER} --password ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY}
+  script:
+    - docker pull ${DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH} || true
+    - docker build --pull --cache-from ${DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH} -t ${DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH} .
+    - docker push ${DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH}
+  except:
+    - master
+    - tags
+
 gitlab build merge requests:
   stage: build
   before_script:
     - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
   script:
-    - docker build --pull -t ${CI_REGISTRY_IMAGE}:merge .
-    - docker push ${CI_REGISTRY_IMAGE}:merge
+    - docker build --pull -t ${CI_REGISTRY_IMAGE}:${CI_MERGE_REQUEST_ID} .
+    - docker push ${CI_REGISTRY_IMAGE}:${CI_MERGE_REQUEST_ID}
   only:
     - merge_requests
 
@@ -79,8 +103,8 @@ docker build merge requests:
   before_script:
     - docker login --username ${DOCKER_REGISTRY_USER} --password ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY}
   script:
-    - docker build --pull -t ${DOCKER_REGISTRY_IMAGE}:merge .
-    - docker push ${DOCKER_REGISTRY_IMAGE}:merge
+    - docker build --pull -t ${DOCKER_REGISTRY_IMAGE}:${CI_MERGE_REQUEST_ID} .
+    - docker push ${DOCKER_REGISTRY_IMAGE}:${CI_MERGE_REQUEST_ID}
   only:
     - merge_requests
 
